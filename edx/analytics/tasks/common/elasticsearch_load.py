@@ -422,7 +422,8 @@ class ElasticsearchIndexTask(OverwriteOutputMixin, MapReduceJobTask):
         elasticsearch_client = self.create_elasticsearch_client()
         try:
             elasticsearch_client.indices.delete(index=self.index, ignore=[400, 404])
-        except Exception:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
+            log.exception(e)
             log.exception("Unable to rollback the elasticsearch load.")
 
     def run(self):
